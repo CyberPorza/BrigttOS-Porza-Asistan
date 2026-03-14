@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBERPORZA - Local Interface</title>
+    <style>
+        :root {
+            --primary: #00ffcc; /* CyberPorza için biraz daha "hacker" yeşili/mavisi */
+            --secondary: #007a99;
+            --accent: #ff3300;
+            --bg: transparent; /* Arka planı tamamen şeffaf yaptık */
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg); /* Şeffaf geçiş */
+            color: var(--primary);
+            font-family: 'Courier New', Courier, monospace; /* Terminal hissi için Courier */
+            overflow: hidden;
+        }
+
+        #dashboard {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: transparent; /* Radyal gradient KALDIRILDI */
+            position: relative;
+        }
+
+        /* --- BACKGROUND GRID --- */
+        #grid {
+            display: none; /* Widget görünümünde ızgaraya gerek yok */
+        }
+
+        /* --- HEADER, FOOTER, VE PANELLERİ GİZLİYORUZ (Ama DOM'da kalıyorlar) --- */
+        header, footer, #stats-panel, #log-panel {
+            display: none !important;
+        }
+
+        /* --- CENTRAL CORE (Sadece bunu göstereceğiz) --- */
+        #core-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .core-circle {
+            position: absolute;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        /* Widget için halka boyutlarını biraz küçülttük */
+        .ring1 {
+            width: 250px;
+            height: 250px;
+            border-style: dashed;
+            animation: spin 20s linear infinite;
+        }
+
+        .ring2 {
+            width: 280px;
+            height: 280px;
+            border-width: 1px;
+            border-style: double;
+            animation: spinReverse 15s linear infinite;
+        }
+
+        .ring3 {
+            width: 220px;
+            height: 220px;
+            border-top-color: var(--primary);
+            border-width: 3px;
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes spinReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        #main-eye {
+            width: 120px; /* Gözü widget boyutuna uygun küçülttük */
+            height: 120px;
+            background: radial-gradient(circle, rgba(0,255,204,0.2) 0%, transparent 70%); /* Primary renge uyumlu */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 30px var(--secondary);
+            z-index: 5;
+            transition: all 0.3s ease;
+        }
+
+        #main-eye.speaking {
+            transform: scale(1.15);
+            box-shadow: 0 0 60px var(--primary);
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="dashboard">
+        <div id="grid"></div>
+
+        <header>
+            <div id="status">ONLINE</div>
+        </header>
+
+        <main id="core-container">
+            <div class="core-circle ring1"></div>
+            <div class="core-circle ring2"></div>
+            <div class="core-circle ring3"></div>
+            <div id="main-eye">
+                <svg width="60" height="60" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="var(--primary)" stroke-width="2"
+                        stroke-dasharray="10 5" />
+                    <text x="50" y="55" text-anchor="middle" fill="var(--primary)" font-size="24"
+                        font-weight="bold">P</text> 
+                </svg>
+            </div>
+            
+            <div id="visualizer" style="display: none;"></div>
+        </main>
+
+        <div id="log-panel"></div>
+
+    </div>
+
+    <script>
+        // Python arayüz fonksiyonlarının hata vermemesi için gerekli objeler (görsel olarak gizli olsalar da)
+        const statusEl = document.getElementById('status');
+        const logPanel = document.getElementById('log-panel');
+        const eye = document.getElementById('main-eye');
+        const visualizer = document.getElementById('visualizer');
+
+        function addLog(msg, type = "brightos") {
+            // Loglar artık konsola düşsün, arayüzde yer kaplamasın
+            console.log(`[${type.toUpperCase()}] ${msg}`);
+        }
+
+        // Bridge from Python
+        window.py_speak = (text) => {
+            eye.classList.add('speaking');
+            addLog(text, "porza");
+            statusEl.innerText = "SPEAKING";
+
+            setTimeout(() => {
+                eye.classList.remove('speaking');
+                statusEl.innerText = "ONLINE";
+            }, 3000); // 5 saniyeden 3 saniyeye düşürdük, daha tepkisel olsun
+        };
+
+        window.py_setStatus = (status) => {
+            statusEl.innerText = status.toUpperCase();
+            if (status === "PROCESSING") {
+                eye.style.boxShadow = "0 0 80px #ff3300"; // Düşünürken Cyber kırmızı
+                addLog("System thinking...", "sys");
+            } else {
+                eye.style.boxShadow = "0 0 30px var(--secondary)";
+            }
+        };
+
+        addLog("CyberPorza systems initialized.");
+    </script>
+</body>
+
+</html>
