@@ -35,7 +35,7 @@ Siber Cephanelik — OSINT tabanlı web arama, otonom yazılım/kod projeleri in
 Sistemi ayağa kaldırmak için terminalini aç ve şunları gir:
 
 ```bash
-git clone [https://github.com/CyberPorza/BrigttOS-Porza-Asistan](https://github.com/CyberPorza/CyberPorza-Asistan)
+git clone [https://github.com/CyberPorza/BrigttOS-Porza-Asistan](https://github.com/CyberPorza/BrigttOS-Porza-Asistan)
 cd CyberPorza-Asistan
 python setup.py
 python main.py
