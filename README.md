@@ -1,12 +1,12 @@
 # 🤖 CyberPorza — Gelişmiş Siber Asistan
-
+```text
    ______      __               ____                        
   / ____/_  __/ /_  ___  ____  / __ \____  _____________ _
  / /   / / / / __ \/ _ \/ __/ / /_/ / __ \/ ___/_  / __ `/
 / /___/ /_/ / /_/ /  __/ /   / ____/ /_/ / /    / /_/ /_/ 
 \____/\__, /_.___/\___/_/   /_/    \____/_/    /___/\__,_/  
      /____/
-
+```
 Geliştirici: Burak (GitHub: CyberPorza)
 
 Yeni Nesil Sesli Yapay Zeka — Sistemin Kontrolü Sende Kankam
